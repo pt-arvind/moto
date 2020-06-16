@@ -60,6 +60,7 @@ BACKENDS = {
     "sqs": ("sqs", "sqs_backends"),
     "ssm": ("ssm", "ssm_backends"),
     "stepfunctions": ("stepfunctions", "stepfunction_backends"),
+    "workspaces": ("workspaces", "workspace_backends"),
     "sts": ("sts", "sts_backends"),
     "swf": ("swf", "swf_backends"),
     "xray": ("xray", "xray_backends"),
