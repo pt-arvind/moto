@@ -21,44 +21,40 @@ simple_definition = (
 account_id = None
 
 @mock_workspaces
-def test_state_machine_list_returns_empty_list_by_default():
+def test_describe_workspaces_returns_empty_list_by_default():
     client = boto3.client("workspaces", region_name=region)
     #
-    list = client.list_state_machines()
-    list["stateMachines"].should.be.empty
+    list = client.describe_workspaces()
+    list["Workspaces"].should.be.empty
 
 #describe_workspaces()
 
 @mock_workspaces
 @mock_sts
-def test_state_machine_list_returns_created_state_machines():
+def test_describe_workspaces_returns_created_workspaces():
     client = boto3.client("workspaces", region_name=region)
     #
-    machine2 = client.create_state_machine(
-        name="name2", definition=str(simple_definition), roleArn=_get_default_role()
+    workspace2 = client.create_workspaces(
+        Workspaces=[{
+            'DirectoryId': "d-29381asfdw",
+            'BundleId': "wsb-asd42hfg1",
+            'UserName': "johndoe"
+        }]
     )
-    machine1 = client.create_state_machine(
-        name="name1",
-        definition=str(simple_definition),
-        roleArn=_get_default_role(),
-        tags=[{"key": "tag_key", "value": "tag_value"}],
+    workspace1 = client.create_workspaces(
+        Workspaces=[{
+            'DirectoryId': "d-29381asfdw",
+            'BundleId': "wsb-asd42hfg1",
+            'UserName': "janedoe"
+        }]
     )
-    list = client.list_state_machines()
+    list = client.describe_workspaces()
     #
     list["ResponseMetadata"]["HTTPStatusCode"].should.equal(200)
-    list["stateMachines"].should.have.length_of(2)
-    list["stateMachines"][0]["creationDate"].should.be.a(datetime)
-    list["stateMachines"][0]["creationDate"].should.equal(machine1["creationDate"])
-    list["stateMachines"][0]["name"].should.equal("name1")
-    list["stateMachines"][0]["stateMachineArn"].should.equal(
-        machine1["stateMachineArn"]
-    )
-    list["stateMachines"][1]["creationDate"].should.be.a(datetime)
-    list["stateMachines"][1]["creationDate"].should.equal(machine2["creationDate"])
-    list["stateMachines"][1]["name"].should.equal("name2")
-    list["stateMachines"][1]["stateMachineArn"].should.equal(
-        machine2["stateMachineArn"]
-    )
+    list["Workspaces"].should.have.length_of(2)
+    list["Workspaces"][0]["UserName"].should.equal("janedoe")
+    list["Workspaces"][1]["UserName"].should.equal("johndoe")
+
 
 def _get_account_id():
     global account_id

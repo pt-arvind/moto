@@ -17,12 +17,6 @@ class AWSError(Exception):
             dict(status=self.status),
         )
 
-
-class ExecutionDoesNotExist(AWSError):
-    TYPE = "ExecutionDoesNotExist"
-    STATUS = 400
-
-
 class InvalidArn(AWSError):
     TYPE = "InvalidArn"
     STATUS = 400
@@ -33,6 +27,6 @@ class InvalidName(AWSError):
     STATUS = 400
 
 
-class StateMachineDoesNotExist(AWSError):
-    TYPE = "StateMachineDoesNotExist"
+class WorkspaceDoesNotExist(AWSError):
+    TYPE = "WorkspaceDoesNotExist"
     STATUS = 400
